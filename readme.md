@@ -37,7 +37,7 @@ POST localhost/api/reports
 ```
 Status 201
 ```
-#### 1. Getting all reports(for test)
+#### 2. Getting all reports(for test)
 
 ```
 GET localhost/api/reports
