@@ -1,12 +1,20 @@
 <?php
-
 namespace App\Http\Controllers;
+
+define('STDIN',fopen("php://stdin","r"));
 
 use App\Models\User;
 use App\Models\Article;
 use App\Models\Type;
 use App\Models\Report;
 use App\Http\Requests\ReportCreateRequest;
+
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Sheets;
+use Google_Service_Sheets_ValueRange;
+use Google_Service_Sheets_Spreadsheet;
+use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
 
 class ReportController extends Controller
 {
@@ -25,8 +33,60 @@ class ReportController extends Controller
         $report->user()->associate($user);
         $report->article()->associate($article);
         $report->type()->associate($type);
-        $report->save();
+        $report->save();        
+
+        // connecting to google sheets
+        $client = $this->getGoogleClient();
+        $sheets = new \Google_Service_Sheets($client);
+        $spreadsheetId = '1XuWs_INMcFR1-DWxrxboVq0SaAiq7nVI5aNyXkuyKJk';
+
+        $this->createSheet($sheets, $spreadsheetId, date('Y/m'));
+
+        // Create the value range Object
+        $valueRange = new Google_Service_Sheets_ValueRange();
+        $valueRange->setValues(["values" => [
+            $request->input('fingerprint'), 
+            $request->input('url'),
+            $request->input('highlighted'),
+            $request->input('description'),
+            $request->input('type'),
+            date('Y/m/d H:i:s')
+        ]]);
+
+        $range = date('Y/m')."!A:F";
+        $conf = ["valueInputOption" => "RAW"];
+
+        $sheets->spreadsheets_values->append($spreadsheetId, $range, $valueRange, $conf);
 
         return response('', 201);
+    }
+
+    public function getGoogleClient() 
+    {
+        $client = new \Google_Client();
+        $client->setApplicationName('wiki-awareness');
+        $client->setScopes([\Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAccessType('offline');
+        $client->setAuthConfig('/var/www/service/g0v-wiki-awareness-e81bff7c6201.json');
+
+        return $client;
+    }
+
+    public function createSheet(Google_Service_Sheets $sheets, $spreadsheetId, $title) 
+    {
+        $sheetsInfo = $sheets->spreadsheets->get($spreadsheetId)['sheets'];
+        $sheetsTitles = array_column(array_column($sheetsInfo, 'properties'), 'title');
+        $hasAlreadyCreated = false;
+        foreach ($sheetsTitles as $key => $value) {
+            if ($value == $title) {
+                $hasAlreadyCreated = true;
+            }
+        }
+
+        if (!$hasAlreadyCreated) {
+            $body = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest(array(
+            'requests' => array('addSheet' => array('properties' => array('title' => $title )))));
+            $result = $sheets->spreadsheets->batchUpdate($spreadsheetId,$body);
+        }
     }
 }

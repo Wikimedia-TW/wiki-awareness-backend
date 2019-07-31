@@ -17,7 +17,7 @@ docker-compose down
 
 ## Task Lists
 - [x] Creating a report
-- [ ] Connecting reports to Google sheets
+- [x] Connecting reports to Google sheets
 
 ## APIs Description
 ### Reports
