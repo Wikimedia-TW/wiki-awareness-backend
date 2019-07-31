@@ -3,6 +3,9 @@ namespace App\Http\Controllers;
 
 define('STDIN',fopen("php://stdin","r"));
 
+use DateTime;
+use DateTimeZone;
+
 use App\Models\User;
 use App\Models\Article;
 use App\Models\Type;
@@ -40,7 +43,7 @@ class ReportController extends Controller
         $sheets = new \Google_Service_Sheets($client);
         $spreadsheetId = '1XuWs_INMcFR1-DWxrxboVq0SaAiq7nVI5aNyXkuyKJk';
 
-        $this->createSheet($sheets, $spreadsheetId, date('Y/m'));
+        $this->createSheet($sheets, $spreadsheetId, $this->getTimeStr('Y/m'));
 
         // Create the value range Object
         $valueRange = new Google_Service_Sheets_ValueRange();
@@ -50,7 +53,7 @@ class ReportController extends Controller
             $request->input('highlighted'),
             $request->input('description'),
             $request->input('type'),
-            date('Y/m/d H:i:s')
+            $this->getTimeStr('Y/m/d H:i:s')
         ]]);
 
         $range = date('Y/m')."!A:F";
@@ -88,5 +91,13 @@ class ReportController extends Controller
             'requests' => array('addSheet' => array('properties' => array('title' => $title )))));
             $result = $sheets->spreadsheets->batchUpdate($spreadsheetId,$body);
         }
+    }
+
+    public function getTimeStr($format) {
+        $tz = 'Asia/Taipei';
+        $timestamp = time();
+        $dt = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
+        $dt->setTimestamp($timestamp); //adjust the object to correct timestamp
+        return $dt->format($format);
     }
 }
