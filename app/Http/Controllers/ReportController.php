@@ -43,7 +43,9 @@ class ReportController extends Controller
         $sheets = new \Google_Service_Sheets($client);
         $spreadsheetId = '1XuWs_INMcFR1-DWxrxboVq0SaAiq7nVI5aNyXkuyKJk';
 
-        $this->createSheet($sheets, $spreadsheetId, $this->getTimeStr('Y/m'));
+        if (date('j') == '1') {
+            $this->createSheet($sheets, $spreadsheetId, $this->getTimeStr('Y/m'));
+        }
 
         // Create the value range Object
         $valueRange = new Google_Service_Sheets_ValueRange();
