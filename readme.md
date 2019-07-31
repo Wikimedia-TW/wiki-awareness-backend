@@ -26,13 +26,13 @@ docker-compose down
 ```
 POST localhost/api/reports
 ```
-| key | validation | max length |
-| --- | --- | --- |
-| fingerprint | string \| required | 255 |
+| key | validation |
+| --- | --- |
+| fingerprint | string \| required \| 255 |
 | url | string \| required | 255 |
-| highlighted | string \| required | 255 |
-| description | string | 255 |
-| type | string \| required | 12 |
+| highlighted | string \| required \| 255 |
+| description | string \| 255 |
+| type | string \| required \| 12 |
 ###### Response Example
 ```
 Status 201
