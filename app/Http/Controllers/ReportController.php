@@ -41,7 +41,7 @@ class ReportController extends Controller
         // connecting to google sheets
         $client = $this->getGoogleClient();
         $sheets = new \Google_Service_Sheets($client);
-        $spreadsheetId = '1XuWs_INMcFR1-DWxrxboVq0SaAiq7nVI5aNyXkuyKJk';
+        $spreadsheetId = config('app.spreadSheetId');
 
         if (date('j') == '1') {
             $this->createSheet($sheets, $spreadsheetId, $this->getTimeStr('Y/m'));
@@ -50,8 +50,8 @@ class ReportController extends Controller
         // Create the value range Object
         $valueRange = new Google_Service_Sheets_ValueRange();
         $valueRange->setValues(["values" => [
-            $request->input('fingerprint'), 
-            urldecode($request->input('url')),
+            $request->input('fingerprint'),
+            '=HYPERLINK("'.($request->input('url')).'";"'.urldecode($request->input('url')).'")',
             $request->input('highlighted'),
             $request->input('description'),
             $request->input('type'),
@@ -59,7 +59,7 @@ class ReportController extends Controller
         ]]);
 
         $range = date('Y/m')."!A:F";
-        $conf = ["valueInputOption" => "RAW"];
+        $conf = ["valueInputOption" => "USER_ENTERED"];
 
         $sheets->spreadsheets_values->append($spreadsheetId, $range, $valueRange, $conf);
 

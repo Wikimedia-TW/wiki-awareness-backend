@@ -125,6 +125,7 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'spreadSheetId' => env('WIKI_GOOGLE_SHEETS_ID'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
