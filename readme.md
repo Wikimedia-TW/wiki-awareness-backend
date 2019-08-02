@@ -1,6 +1,12 @@
 *version 0.1.0*
 ## How To Start Service
-
+##### Installation
+1. Install Docker
+2. Prepare config file & set-up credentials
+```bash
+mv .env.example .env
+```
+3. You are good to go.
 ##### Starting Service
 ```bash
 docker-compose up -d
