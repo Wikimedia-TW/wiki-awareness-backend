@@ -34,7 +34,7 @@ docker-compose exec app php artisan migrate
 ```
 > Note. Only need to be executed once for every version.
 
-##### Ending Service
+##### Stoping Service
 ```bash
 docker-compose down
 ```
