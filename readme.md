@@ -2,7 +2,10 @@
 ## How To Start Service
 ##### Installation
 1. Install Docker
-2. Prepare config file & set-up credentials
+2. git clone
+3. docker run --rm -v $(pwd):/app composer install
+4. sudo chown -R $USER:$USER ~/laravel-app
+5. Config .env and set up GCP project credential file
 ```bash
 mv .env.example .env
 ```
@@ -11,6 +14,10 @@ mv .env.example .env
 ```bash
 docker-compose up -d
 ```
+```bash
+docker-compose exec app php artisan migrate:install
+```
+> Note. Only need to be executed at the first time.
 ```bash
 docker-compose exec app php artisan migrate
 ```
