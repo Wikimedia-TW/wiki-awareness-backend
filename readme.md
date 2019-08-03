@@ -9,7 +9,6 @@
 ```bash
 mv .env.example .env
 ```
-3. You are good to go.
 ##### Starting Service
 ```bash
 docker-compose up -d
