@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/reports', 'ReportController@showAll');
 Route::post('/reports', 'ReportController@create');
 
 
