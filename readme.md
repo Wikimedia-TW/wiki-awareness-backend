@@ -41,7 +41,7 @@ POST localhost/api/reports
 | key | validation |
 | --- | --- |
 | fingerprint | string \| required \| 255 |
-| url | string \| required | 255 |
+| url | string \| required \| 255 |
 | highlighted | string \| required \| 255 |
 | description | string \| 255 |
 | type | string \| required \| 12 |
