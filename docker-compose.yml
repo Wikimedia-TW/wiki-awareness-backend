@@ -27,11 +27,12 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "8000:80"
       - "443:443"
     volumes:
       - ./:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - /etc/letsencrypt:/etc/letsencrypt
     networks:
       - app-network
 
@@ -45,9 +46,9 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: wiki-awareness
-      MYSQL_ROOT_PASSWORD: wiki-awareness
-      MYSQL_USER: wiki-awareness
-      MYSQL_PASSWORD: wiki-awareness
+      MYSQL_ROOT_PASSWORD: 5d3325e9
+      MYSQL_USER: wiki-awareness-test
+      MYSQL_PASSWORD: wiki-awareness-test
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:

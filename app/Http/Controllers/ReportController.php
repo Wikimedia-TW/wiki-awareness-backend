@@ -49,7 +49,7 @@ class ReportController extends Controller
 
         // Create the value range Object
         $valueRange = new Google_Service_Sheets_ValueRange();
-        $valueRange->setValues(["values" => [
+	$valueRange->setValues(["values" => [
             $request->input('fingerprint'),
             '=HYPERLINK("'.($request->input('url')).'";"'.urldecode($request->input('url')).'")',
             $request->input('highlighted'),
