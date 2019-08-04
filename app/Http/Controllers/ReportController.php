@@ -28,8 +28,12 @@ class ReportController extends Controller
 
     public function create(ReportCreateRequest $request)
     {
+        $ZH_WIKI_PREFIX = 'https://zh.wikipedia.org/wiki/';
+
+        $url = str_replace($ZH_WIKI_PREFIX, '', $request->input('url'));
+
         $user = User::create($request->all());
-        $article = Article::create($request->all());
+        $article = Article::create(array('url' => $url));
         $type = Type::create($request->all());
 
         $report = new Report($request->all());
@@ -49,7 +53,7 @@ class ReportController extends Controller
 
         // Create the value range Object
         $valueRange = new Google_Service_Sheets_ValueRange();
-	$valueRange->setValues(["values" => [
+	    $valueRange->setValues(["values" => [
             $request->input('fingerprint'),
             '=HYPERLINK("'.($request->input('url')).'";"'.urldecode($request->input('url')).'")',
             $request->input('highlighted'),
